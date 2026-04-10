@@ -24,6 +24,7 @@ from configparser import ConfigParser
 
 import schedule
 import pytz
+from dotenv import load_dotenv
 
 from auth      import get_client
 from data      import fetch_spot
@@ -310,7 +311,21 @@ def is_execution_window(cfg):
     return False
 
 
+def _load_env():
+    """Load .env and remap custom var names to what upstox-totp expects."""
+    load_dotenv()
+    remap = {
+        "UPSTOX_API_KEY": "UPSTOX_CLIENT_ID",
+        "UPSTOX_SECRET":  "UPSTOX_CLIENT_SECRET",
+        "TOTP_KEY":       "UPSTOX_TOTP_SECRET",
+    }
+    for src, dst in remap.items():
+        if os.environ.get(src) and not os.environ.get(dst):
+            os.environ[dst] = os.environ[src]
+
+
 def main():
+    _load_env()
     cfg = load_config()
     setup_logging(cfg["PATHS"]["log_file"])
 
