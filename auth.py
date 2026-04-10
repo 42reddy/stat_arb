@@ -63,14 +63,15 @@ def get_client(cfg: ConfigParser) -> tuple[upstox_client.ApiClient, str]:
             # LIVE MODE: Fresh TOTP login
             logger.info("No valid cached token — performing fresh TOTP login for LIVE mode")
 
-            # upstox-totp reads credentials from env vars
-            os.environ["UPSTOX_USERNAME"]    = cfg["UPSTOX"]["mobile"]
-            os.environ["UPSTOX_PASSWORD"]    = cfg["UPSTOX"]["password"]
-            os.environ["UPSTOX_PIN_CODE"]    = cfg["UPSTOX"]["pin"]
-            os.environ["UPSTOX_TOTP_SECRET"] = cfg["UPSTOX"]["totp_secret"]
-            os.environ["UPSTOX_CLIENT_ID"]   = cfg["UPSTOX"]["client_id"]
-            os.environ["UPSTOX_CLIENT_SECRET"]= cfg["UPSTOX"]["client_secret"]
-            os.environ["UPSTOX_REDIRECT_URI"]= cfg["UPSTOX"]["redirect_uri"]
+            # upstox-totp reads credentials from env vars.
+            # Env vars take priority (cloud secrets); config.ini values are local fallbacks.
+            os.environ.setdefault("UPSTOX_USERNAME",     cfg["UPSTOX"].get("mobile", ""))
+            os.environ.setdefault("UPSTOX_PASSWORD",     cfg["UPSTOX"].get("password", ""))
+            os.environ.setdefault("UPSTOX_PIN_CODE",     cfg["UPSTOX"].get("pin", ""))
+            os.environ.setdefault("UPSTOX_TOTP_SECRET",  cfg["UPSTOX"].get("totp_secret", ""))
+            os.environ.setdefault("UPSTOX_CLIENT_ID",    cfg["UPSTOX"].get("client_id", ""))
+            os.environ.setdefault("UPSTOX_CLIENT_SECRET",cfg["UPSTOX"].get("client_secret", ""))
+            os.environ.setdefault("UPSTOX_REDIRECT_URI", cfg["UPSTOX"].get("redirect_uri", ""))
 
             for attempt in range(1, 4):
                 try:
