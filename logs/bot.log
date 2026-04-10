@@ -1,0 +1,193 @@
+2026-03-24 02:49:26  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-24 02:49:26  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-24 02:49:26  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-24 02:49:26  INFO      bot  === Logging in to Upstox ===
+2026-03-24 02:49:26  INFO      auth  No valid cached token — performing fresh TOTP login
+2026-03-24 02:49:27  ERROR     auth  Login attempt 1 failed: UDAPI100068: Check your 'client_id' and 'redirect_uri'; one or both are incorrect.
+💡 Tip: Verify your client_id and redirect_uri in your .env file match your Upstox developer app settings.
+2026-03-24 02:49:39  ERROR     auth  Login attempt 2 failed: UDAPI100068: Check your 'client_id' and 'redirect_uri'; one or both are incorrect.
+💡 Tip: Verify your client_id and redirect_uri in your .env file match your Upstox developer app settings.
+2026-03-24 02:57:33  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-24 02:57:33  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-24 02:57:33  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-24 02:57:33  INFO      bot  === Logging in to Upstox ===
+2026-03-24 02:57:33  INFO      auth  Using manually provided Sandbox Access Token
+2026-03-24 02:57:33  INFO      auth  No valid cached token — performing fresh TOTP login
+2026-03-24 02:57:34  ERROR     auth  Login attempt 1 failed: UDAPI100068: Check your 'client_id' and 'redirect_uri'; one or both are incorrect.
+💡 Tip: Verify your client_id and redirect_uri in your .env file match your Upstox developer app settings.
+2026-03-24 02:57:45  ERROR     auth  Login attempt 2 failed: UDAPI100068: Check your 'client_id' and 'redirect_uri'; one or both are incorrect.
+💡 Tip: Verify your client_id and redirect_uri in your .env file match your Upstox developer app settings.
+2026-03-24 02:59:21  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-24 02:59:21  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-24 02:59:21  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-24 02:59:21  INFO      bot  === Logging in to Upstox ===
+2026-03-24 02:59:21  INFO      auth  Sandbox token applied and cached.
+2026-03-24 02:59:21  INFO      auth  No valid cached token — performing fresh TOTP login
+2026-03-24 02:59:22  ERROR     auth  Login attempt 1 failed: UDAPI100068: Check your 'client_id' and 'redirect_uri'; one or both are incorrect.
+💡 Tip: Verify your client_id and redirect_uri in your .env file match your Upstox developer app settings.
+2026-03-24 02:59:34  ERROR     auth  Login attempt 2 failed: UDAPI100068: Check your 'client_id' and 'redirect_uri'; one or both are incorrect.
+💡 Tip: Verify your client_id and redirect_uri in your .env file match your Upstox developer app settings.
+2026-03-24 03:01:09  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-24 03:01:09  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-24 03:01:09  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-24 03:01:09  INFO      bot  === Logging in to Upstox ===
+2026-03-24 03:01:09  INFO      auth  Using cached access_token from today
+2026-03-24 03:01:09  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-03-24 03:01:09  INFO      bot  Login OK
+2026-03-24 03:01:09  INFO      bot  Outside market hours — skipping
+2026-03-24 03:01:09  INFO      bot  Scheduler running. Press Ctrl+C to stop.
+2026-03-24 03:01:57  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-24 03:01:57  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-24 03:01:57  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-24 03:01:57  INFO      bot  === Logging in to Upstox ===
+2026-03-24 03:01:57  INFO      auth  Using cached access_token from today
+2026-03-24 03:01:57  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-03-24 03:01:57  INFO      bot  Login OK
+2026-03-24 03:01:57  INFO      bot  Outside market hours — skipping
+2026-03-24 03:01:57  INFO      bot  Scheduler running. Press Ctrl+C to stop.
+2026-03-24 12:38:10  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-24 12:38:10  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-24 12:38:10  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-24 12:38:10  INFO      bot  === Logging in to Upstox ===
+2026-03-24 12:38:10  INFO      auth  Using cached access_token from today
+2026-03-24 12:38:10  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-03-24 12:38:10  INFO      bot  Login OK
+2026-03-24 12:38:10  INFO      bot  ── Cycle start  2026-03-24 12:38 IST ──
+2026-03-24 12:38:10  ERROR     bot  Unhandled error in cycle: UserApi.get_profile() missing 1 required positional argument: 'api_version'
+Traceback (most recent call last):
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 261, in scheduled_cycle
+    bot.run_cycle()
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 122, in run_cycle
+    self.ensure_session()
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 113, in ensure_session
+    upstox_client.UserApi(self._api_client).get_profile()
+TypeError: UserApi.get_profile() missing 1 required positional argument: 'api_version'
+2026-03-24 12:38:10  INFO      bot  Scheduler running. Press Ctrl+C to stop.
+2026-03-24 12:39:30  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-24 12:39:30  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-24 12:39:30  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-24 12:39:30  INFO      bot  === Logging in to Upstox ===
+2026-03-24 12:39:30  INFO      auth  Using cached access_token from today
+2026-03-24 12:39:30  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-03-24 12:39:30  INFO      bot  Login OK
+2026-03-24 12:39:30  INFO      bot  ── Cycle start  2026-03-24 12:39 IST ──
+2026-03-24 12:39:30  ERROR     bot  Unhandled error in cycle: This API is not available in sandbox mode.
+Traceback (most recent call last):
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 261, in scheduled_cycle
+    bot.run_cycle()
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 122, in run_cycle
+    self.ensure_session()
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 113, in ensure_session
+    upstox_client.UserApi(self._api_client).get_profile(api_version='2.0')
+  File "/Applications/anaconda3/envs/chandra/lib/python3.12/site-packages/upstox_client/api/user_api.py", line 54, in get_profile
+    (data) = self.get_profile_with_http_info(api_version, **kwargs)  # noqa: E501
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Applications/anaconda3/envs/chandra/lib/python3.12/site-packages/upstox_client/api/user_api.py", line 114, in get_profile_with_http_info
+    return self.api_client.call_api(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Applications/anaconda3/envs/chandra/lib/python3.12/site-packages/upstox_client/api_client.py", line 324, in call_api
+    raise ValueError('This API is not available in sandbox mode.')
+ValueError: This API is not available in sandbox mode.
+2026-03-24 12:39:30  INFO      bot  Scheduler running. Press Ctrl+C to stop.
+2026-03-24 12:40:00  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-24 12:40:00  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-24 12:40:00  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-24 12:40:00  INFO      bot  === Logging in to Upstox ===
+2026-03-24 12:40:00  INFO      auth  Using cached access_token from today
+2026-03-24 12:40:00  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-03-24 12:40:00  INFO      bot  Login OK
+2026-03-24 12:40:00  INFO      bot  ── Cycle start  2026-03-24 12:40 IST ──
+2026-03-24 12:40:00  ERROR     bot  Unhandled error in cycle: This API is not available in sandbox mode.
+Traceback (most recent call last):
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 261, in scheduled_cycle
+    bot.run_cycle()
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 122, in run_cycle
+    self.ensure_session()
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 113, in ensure_session
+    upstox_client.UserApi(self._api_client).get_profile(api_version='1.0')
+  File "/Applications/anaconda3/envs/chandra/lib/python3.12/site-packages/upstox_client/api/user_api.py", line 54, in get_profile
+    (data) = self.get_profile_with_http_info(api_version, **kwargs)  # noqa: E501
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Applications/anaconda3/envs/chandra/lib/python3.12/site-packages/upstox_client/api/user_api.py", line 114, in get_profile_with_http_info
+    return self.api_client.call_api(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Applications/anaconda3/envs/chandra/lib/python3.12/site-packages/upstox_client/api_client.py", line 324, in call_api
+    raise ValueError('This API is not available in sandbox mode.')
+ValueError: This API is not available in sandbox mode.
+2026-03-24 12:40:00  INFO      bot  Scheduler running. Press Ctrl+C to stop.
+2026-03-24 12:40:21  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-24 12:40:21  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-24 12:40:21  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-24 12:40:21  INFO      bot  === Logging in to Upstox ===
+2026-03-24 12:40:21  INFO      auth  Using cached access_token from today
+2026-03-24 12:40:21  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-03-24 12:40:21  INFO      bot  Login OK
+2026-03-24 12:40:21  INFO      bot  ── Cycle start  2026-03-24 12:40 IST ──
+2026-03-24 12:40:21  ERROR     bot  Unhandled error in cycle: This API is not available in sandbox mode.
+Traceback (most recent call last):
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 261, in scheduled_cycle
+    bot.run_cycle()
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 122, in run_cycle
+    self.ensure_session()
+  File "/Users/chandramoulireddy/Downloads/PycharmProjects/stat_arb_upstox/bot.py", line 113, in ensure_session
+    upstox_client.UserApi(self._api_client).get_profile(api_version='2.0')
+  File "/Applications/anaconda3/envs/chandra/lib/python3.12/site-packages/upstox_client/api/user_api.py", line 54, in get_profile
+    (data) = self.get_profile_with_http_info(api_version, **kwargs)  # noqa: E501
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Applications/anaconda3/envs/chandra/lib/python3.12/site-packages/upstox_client/api/user_api.py", line 114, in get_profile_with_http_info
+    return self.api_client.call_api(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Applications/anaconda3/envs/chandra/lib/python3.12/site-packages/upstox_client/api_client.py", line 324, in call_api
+    raise ValueError('This API is not available in sandbox mode.')
+ValueError: This API is not available in sandbox mode.
+2026-03-24 12:40:21  INFO      bot  Scheduler running. Press Ctrl+C to stop.
+2026-03-24 12:42:01  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-24 12:42:01  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-24 12:42:01  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-24 12:42:01  INFO      bot  === Logging in to Upstox ===
+2026-03-24 12:42:01  INFO      auth  Using cached access_token from today
+2026-03-24 12:42:01  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-03-24 12:42:01  INFO      bot  Login OK
+2026-03-24 12:42:01  INFO      bot  ── Cycle start  2026-03-24 12:42 IST ──
+2026-03-24 12:42:01  INFO      bot  Skipping session validation (Sandbox mode)
+2026-03-24 12:42:01  INFO      data  Fetching 90d hourly data: NHPC.NS, POWERGRID.NS
+2026-03-24 12:42:02  INFO      data  Data fetched: 613 hourly bars  [2025-11-14 09:15:00+05:30 → 2026-03-24 12:15:00+05:30]
+2026-03-24 12:42:02  INFO      bot  z_slow=0.192  dir=None  lots=0  long_entry=False  short_entry=False  exit=True
+2026-03-24 12:42:02  INFO      bot  ── Cycle end ──
+2026-03-24 12:42:02  INFO      bot  Scheduler running. Press Ctrl+C to stop.
+2026-03-28 16:43:34  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-28 16:43:34  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-28 16:43:34  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-28 16:43:34  INFO      bot  === Logging in to Upstox ===
+2026-03-28 16:43:34  INFO      auth  Sandbox token applied and cached to disk
+2026-03-28 16:43:34  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-03-28 16:43:34  INFO      bot  Login OK
+2026-03-28 16:43:34  INFO      bot  Outside market hours or Weekend — skipping.
+2026-03-28 16:43:34  INFO      bot  Bot Active. Checking signals every 15 mins. (Skip: 09:15-10:15)
+2026-03-28 20:47:27  INFO      bot  ╔══════════════════════════════════════════╗
+2026-03-28 20:47:27  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-03-28 20:47:27  INFO      bot  ╚══════════════════════════════════════════╝
+2026-03-28 20:47:27  INFO      bot  === Logging in to Upstox ===
+2026-03-28 20:47:27  INFO      auth  Using cached access_token from today
+2026-03-28 20:47:27  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-03-28 20:47:27  INFO      bot  Login OK
+2026-03-28 20:47:27  INFO      bot  Outside market hours or Weekend — skipping.
+2026-03-28 20:47:27  INFO      bot  Bot Active. Checking signals every 15 mins. (Skip: 09:15-10:15)
+2026-04-06 19:14:47  INFO      bot  ╔══════════════════════════════════════════╗
+2026-04-06 19:14:47  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-04-06 19:14:47  INFO      bot  ╚══════════════════════════════════════════╝
+2026-04-06 19:14:47  INFO      bot  === Logging in to Upstox ===
+2026-04-06 19:14:47  INFO      auth  Sandbox token applied and cached to disk
+2026-04-06 19:14:47  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-04-06 19:14:47  INFO      bot  Login OK
+2026-04-06 19:14:47  INFO      bot  Outside market hours or Weekend — skipping.
+2026-04-06 19:14:47  INFO      bot  Bot Active. Checking signals every 15 mins. (Skip first hour after open: 09:20-10:20)
+2026-04-06 19:45:43  INFO      bot  ╔══════════════════════════════════════════╗
+2026-04-06 19:45:43  INFO      bot  ║  NHPC/POWERGRID Stat-Arb Bot — Upstox   ║
+2026-04-06 19:45:43  INFO      bot  ╚══════════════════════════════════════════╝
+2026-04-06 19:45:43  INFO      bot  === Logging in to Upstox ===
+2026-04-06 19:45:43  INFO      auth  Using cached access_token from today
+2026-04-06 19:45:43  INFO      auth  ★ SANDBOX MODE — no real orders will be placed ★
+2026-04-06 19:45:43  INFO      bot  Login OK
+2026-04-06 19:45:43  INFO      bot  Outside market hours or Weekend — skipping.
+2026-04-06 19:45:43  INFO      bot  Bot Active. Checking signals every 15 mins. (Skip first hour after open: 09:20-10:20)
