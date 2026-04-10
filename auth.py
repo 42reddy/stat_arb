@@ -48,10 +48,10 @@ def get_client(cfg: ConfigParser) -> tuple[upstox_client.ApiClient, str]:
     # ── Fresh login if needed ────────────────────────────────────
     if not access_token:
         if sandbox:
-            # 1. Pull the manual token from config
-            access_token = cfg["UPSTOX"].get("sandbox_token")
+            # 1. Pull the manual token from env var or config
+            access_token = os.environ.get("UPSTOX_SANDBOX_TOKEN") or cfg["UPSTOX"].get("sandbox_token")
             if not access_token:
-                raise RuntimeError("SANDBOX ENABLED: 'sandbox_token' missing in config.ini. Please paste your manual token.")
+                raise RuntimeError("SANDBOX ENABLED: set UPSTOX_SANDBOX_TOKEN env var or add 'sandbox_token' in config.ini.")
 
             # 2. Update the cache
             with open(token_file, "w") as f:
