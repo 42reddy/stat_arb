@@ -62,24 +62,27 @@ def setup_logging(log_file: str):
 # ══════════════════════════════════════════════════════════════════════════════
 
 PARAMS = {
-    "T1" : 'POWERGRID.NS',
-    "T2" : 'NHPC.NS',
-    "slow_window":       32,
-    "medium_window":     16,
-    "fast_span":         10,
-    "vol_window":        20,
-    "z_entry_long":      1.582,
-    "z_entry_short":     1.683,
-    "z_exit_long":       0.217,
-    "z_exit_short":      0.189,
-    "z_stop_long":       3.318,
-    "z_stop_short":      3.884,
-    "z_add":             2.309,
-    "vol_cap":           2.269,
-    "max_hold":          49,
-    "autocorr_window":   20,
-    "autocorr_threshold":0.1,
-    "ou_adapt_span":     252,
+    "T1":                 "HAL.NS",
+    "T2":                 "BDL.NS",
+    "slow_window":        23,
+    "medium_window":      34,
+    "fast_span":          10,
+    "vol_window":         20,
+    "z_entry_long":       1.7065,
+    "z_entry_short":      1.8698,
+    "z_exit_long":        0.1105,
+    "z_exit_short":       0.2443,
+    "z_stop_long":        2.8,
+    "z_stop_short":       2.8,
+    "z_add":              2.0,
+    "vol_cap":            1.5,
+    "max_hold":           25,
+    "z_entry":            1.25,
+    "z_exit":             0.30,
+    "z_stop":             3.0,
+    "autocorr_window":    20,
+    "autocorr_threshold": 0.1,
+    "ou_adapt_span":      252,
 }
 
 logger = logging.getLogger("bot")
@@ -377,3 +380,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
