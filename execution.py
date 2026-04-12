@@ -13,6 +13,7 @@ Look up tokens at:
 """
 
 import logging
+import time
 from configparser import ConfigParser
 from typing import Optional
 
@@ -115,6 +116,47 @@ class Executor:
     def add_short(self, extra_lots: int) -> dict:
         logger.info(f"PYRAMIDING SHORT (+{extra_lots} lot(s))")
         return self.enter_short(extra_lots)
+
+    def get_fill_price(self, order_id: str, retries: int = 3) -> Optional[float]:
+        """
+        Fetch the average fill price for a completed order from Upstox.
+        Retries up to `retries` times with a 1-second pause to allow the
+        order to fully settle before querying.
+        Returns None if unavailable or on any error.
+        """
+        if not order_id:
+            return None
+        for attempt in range(1, retries + 1):
+            try:
+                time.sleep(1)  # let the order settle on the exchange
+                resp = self.order_api.get_order_details(
+                    order_id, api_version="2.0"
+                )
+                price = getattr(resp.data, "average_price", None)
+                if price:
+                    return float(price)
+            except ApiException as e:
+                logger.debug(
+                    f"Fill-price fetch attempt {attempt}/{retries} failed "
+                    f"order={order_id}: status={e.status}"
+                )
+            except Exception as e:
+                logger.debug(
+                    f"Fill-price fetch attempt {attempt}/{retries} failed "
+                    f"order={order_id}: {e}"
+                )
+        logger.warning(f"Could not obtain fill price for order {order_id} — will use spot price.")
+        return None
+
+    def get_leg_fills(self, order_ids: dict) -> dict:
+        """
+        Fetch fill prices for both legs of a spread trade.
+        Returns {"long_fill": float|None, "short_fill": float|None}.
+        """
+        return {
+            "long_fill":  self.get_fill_price(order_ids.get("long_leg"))  if order_ids.get("long_leg")  else None,
+            "short_fill": self.get_fill_price(order_ids.get("short_leg")) if order_ids.get("short_leg") else None,
+        }
 
     def get_positions(self) -> dict:
         """Fetch current net positions. Returns {instrument_token: position_obj}."""

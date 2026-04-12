@@ -21,16 +21,18 @@ import sys
 import time
 from datetime import datetime, time as dt_time
 from configparser import ConfigParser
+from typing import Optional
 
 import schedule
 import pytz
 from dotenv import load_dotenv
 
-from auth      import get_client
-from data      import fetch_spot
-from state     import PositionState
-from execution import Executor
-from features  import features as Features
+from auth       import get_client
+from data       import fetch_spot
+from state      import PositionState
+from execution  import Executor
+from features   import features as Features
+from trade_log  import TradeLogger
 
 IST = pytz.timezone("Asia/Kolkata")
 
@@ -94,16 +96,17 @@ logger = logging.getLogger("bot")
 
 class StatArbBot:
     def __init__(self, cfg: ConfigParser):
-        self.cfg      = cfg
-        self.state    = PositionState(cfg["PATHS"]["state_file"])
-        self.params   = dict(PARAMS)
+        self.cfg        = cfg
+        self.state      = PositionState(cfg["PATHS"]["state_file"])
+        self.trade_log  = TradeLogger(cfg["PATHS"]["trade_log_file"])
+        self.params     = dict(PARAMS)
         self.params["T1"] = cfg["STRATEGY"]["ticker_long"]
         self.params["T2"] = cfg["STRATEGY"]["ticker_short"]
-        self.feat_eng = Features(t1=self.params["T1"], t2=self.params["T2"])
-        self.executor = None
+        self.feat_eng   = Features(t1=self.params["T1"], t2=self.params["T2"])
+        self.executor   = None
         self._api_client  = None
-        self._ou_mean = None
-        self._beta    = None
+        self._ou_mean   = None
+        self._beta      = None
 
     def login(self):
         logger.info("=== Logging in to Upstox ===")
@@ -165,11 +168,19 @@ class StatArbBot:
         latest = sig.iloc[-1]
         z_now  = float(feat["z_slow"].iloc[-1])
 
+        # Spot prices of the last bar — used as price reference in trade log
+        t1_spot = float(df[self.params["T1"]].iloc[-1])
+        t2_spot = float(df[self.params["T2"]].iloc[-1])
+
         logger.info(
             f"z_slow={z_now:.3f}  dir={self.state.direction}  lots={self.state.lots}  "
             f"long_entry={latest['long_entry']}  short_entry={latest['short_entry']}  "
-            f"exit={latest['exit_any']}"
+            f"exit={latest['exit_any']}  "
+            f"T1={t1_spot:.2f}  T2={t2_spot:.2f}"
         )
+
+        # Portfolio summary at each cycle (visible in bot.log)
+        self.trade_log.log_portfolio_summary()
 
         today_str = now_ist.strftime("%Y-%m-%d")
 
@@ -179,26 +190,26 @@ class StatArbBot:
             hold_days = (now_ist.replace(tzinfo=None) - entry_dt).days
             if hold_days >= self.params["max_hold"]:
                 logger.info(f"MAX HOLD reached ({hold_days}d) — forcing exit")
-                self._exit(reason="time_stop")
+                self._exit(reason="time_stop", z_score=z_now, t1_spot=t1_spot, t2_spot=t2_spot)
                 return
 
         # 5. Exit logic
         if not self.state.is_flat:
-            should_exit = False
+            exit_reason = None
             if self.state.direction == "long"  and latest["exit_stop_long"]:
                 logger.info(f"STOP triggered on LONG  z={z_now:.3f}")
-                should_exit = True
+                exit_reason = "stop"
             elif self.state.direction == "short" and latest["exit_stop_short"]:
                 logger.info(f"STOP triggered on SHORT z={z_now:.3f}")
-                should_exit = True
+                exit_reason = "stop"
             elif self.state.direction == "long"  and latest["exit_mean_long"]:
                 logger.info(f"Mean-revert exit on LONG  z={z_now:.3f}")
-                should_exit = True
+                exit_reason = "mean_revert"
             elif self.state.direction == "short" and latest["exit_mean_short"]:
                 logger.info(f"Mean-revert exit on SHORT z={z_now:.3f}")
-                should_exit = True
-            if should_exit:
-                self._exit()
+                exit_reason = "mean_revert"
+            if exit_reason:
+                self._exit(reason=exit_reason, z_score=z_now, t1_spot=t1_spot, t2_spot=t2_spot)
                 return
 
         # 6. Pyramid logic
@@ -210,6 +221,13 @@ class StatArbBot:
                     logger.error("LONG add rejected: one or more legs failed. State unchanged.")
                     return
                 self.state.add_lots(1, oids)
+                # Fetch fills (best effort) then log pyramid
+                fills = self.executor.get_leg_fills(oids)
+                self.trade_log.log_pyramid(
+                    lots_added=1, z_score=z_now, order_ids=oids,
+                    t1_spot=t1_spot, t2_spot=t2_spot,
+                    t1_fill=fills["long_fill"], t2_fill=fills["short_fill"],
+                )
                 return
             elif self.state.direction == "short" and latest["short_add"]:
                 oids = self.executor.add_short(1)
@@ -217,6 +235,12 @@ class StatArbBot:
                     logger.error("SHORT add rejected: one or more legs failed. State unchanged.")
                     return
                 self.state.add_lots(1, oids)
+                fills = self.executor.get_leg_fills(oids)
+                self.trade_log.log_pyramid(
+                    lots_added=1, z_score=z_now, order_ids=oids,
+                    t1_spot=t1_spot, t2_spot=t2_spot,
+                    t1_fill=fills["long_fill"], t2_fill=fills["short_fill"],
+                )
                 return
 
         # 7. Entry logic
@@ -233,6 +257,16 @@ class StatArbBot:
                     beta=self._beta, ou_mean=self._ou_mean,
                     order_ids=oids,
                 )
+                fills = self.executor.get_leg_fills(oids)
+                self.trade_log.log_entry(
+                    direction="long", lots=1, z_score=z_now,
+                    beta=self._beta, ou_mean=self._ou_mean,
+                    order_ids=oids,
+                    t1_name=self.params["T1"], t2_name=self.params["T2"],
+                    lot_long=self.executor.lot_long, lot_short=self.executor.lot_short,
+                    t1_spot=t1_spot, t2_spot=t2_spot,
+                    t1_fill=fills["long_fill"], t2_fill=fills["short_fill"],
+                )
             elif latest["short_entry"]:
                 logger.info(f"SHORT ENTRY  z={z_now:.3f}")
                 oids = self.executor.enter_short(lots=1)
@@ -245,10 +279,26 @@ class StatArbBot:
                     beta=self._beta, ou_mean=self._ou_mean,
                     order_ids=oids,
                 )
+                fills = self.executor.get_leg_fills(oids)
+                self.trade_log.log_entry(
+                    direction="short", lots=1, z_score=z_now,
+                    beta=self._beta, ou_mean=self._ou_mean,
+                    order_ids=oids,
+                    t1_name=self.params["T1"], t2_name=self.params["T2"],
+                    lot_long=self.executor.lot_long, lot_short=self.executor.lot_short,
+                    t1_spot=t1_spot, t2_spot=t2_spot,
+                    t1_fill=fills["long_fill"], t2_fill=fills["short_fill"],
+                )
 
         logger.info("── Cycle end ──")
 
-    def _exit(self, reason: str = "signal"):
+    def _exit(
+        self,
+        reason: str = "signal",
+        z_score: Optional[float] = None,
+        t1_spot: Optional[float] = None,
+        t2_spot: Optional[float] = None,
+    ):
         direction = self.state.direction
         lots      = self.state.lots
         logger.info(f"Exiting {direction} ({lots} lots)  reason={reason}")
@@ -259,6 +309,17 @@ class StatArbBot:
         if not self._legs_ok(oids):
             logger.error("Exit incomplete: one or more legs failed. Position state kept open.")
             return
+        # Fetch broker fill prices (best effort) before closing state
+        fills = self.executor.get_leg_fills(oids)
+        self.trade_log.log_exit(
+            reason=reason,
+            z_score=z_score or 0.0,
+            order_ids=oids,
+            t1_spot=t1_spot,
+            t2_spot=t2_spot,
+            t1_fill=fills["long_fill"],
+            t2_fill=fills["short_fill"],
+        )
         self.state.close_position()
 
     @staticmethod
