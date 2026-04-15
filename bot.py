@@ -172,11 +172,38 @@ class StatArbBot:
         t1_spot = float(df[self.params["T1"]].iloc[-1])
         t2_spot = float(df[self.params["T2"]].iloc[-1])
 
+        # ── Detailed state snapshot ──────────────────────────────────────────
+        z_med_now  = float(feat["z_med"].iloc[-1])
+        z_fast_now = float(feat["z_fast"].iloc[-1])
+        z_ou_now   = float(feat["z_ou"].iloc[-1])
+        agree_now  = int(feat["agreement"].iloc[-1])
+        mr_now     = bool(feat["mr_regime"].iloc[-1])
+        vr_now     = float(feat["vol_ratio"].iloc[-1])
+        lr_now     = float(feat["lr"].iloc[-1])
+
+        pos_line = (
+            f"dir={self.state.direction}  lots={self.state.lots}"
+            + (f"  entry_date={self.state.entry_date}  entry_z={self.state.entry_z:.3f}"
+               if not self.state.is_flat and self.state.entry_date else "  (flat)")
+        )
         logger.info(
-            f"z_slow={z_now:.3f}  dir={self.state.direction}  lots={self.state.lots}  "
-            f"long_entry={latest['long_entry']}  short_entry={latest['short_entry']}  "
-            f"exit={latest['exit_any']}  "
-            f"T1={t1_spot:.2f}  T2={t2_spot:.2f}"
+            f"\n"
+            f"  ┌── Cycle Snapshot ──────────────────────────────────\n"
+            f"  │  Prices   : {self.params['T1']}={t1_spot:.2f}  {self.params['T2']}={t2_spot:.2f}"
+            f"  β={self._beta:.4f}  spread(lr)={lr_now:.5f}\n"
+            f"  │  Z-scores : slow={z_now:+.3f}  med={z_med_now:+.3f}"
+            f"  fast={z_fast_now:+.3f}  ou={z_ou_now:+.3f}\n"
+            f"  │  Agreement: {agree_now:+d}/4  "
+            f"MR-regime={'YES' if mr_now else 'NO '}  "
+            f"vol_ratio={vr_now:.2f}  "
+            f"vol_ok={'YES' if vr_now < self.params['vol_cap'] else 'NO '}\n"
+            f"  │  Signals  : long_entry={latest['long_entry']}  short_entry={latest['short_entry']}"
+            f"  long_add={latest['long_add']}  short_add={latest['short_add']}\n"
+            f"  │  Exits    : mean_long={latest['exit_mean_long']}  mean_short={latest['exit_mean_short']}"
+            f"  stop_long={latest['exit_stop_long']}  stop_short={latest['exit_stop_short']}"
+            f"  cross={latest['exit_cross']}\n"
+            f"  │  Position : {pos_line}\n"
+            f"  └────────────────────────────────────────────────────"
         )
 
         # Portfolio summary at each cycle (visible in bot.log)
